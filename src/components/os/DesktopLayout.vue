@@ -18,13 +18,24 @@ import PsyDock from './PsyDock.vue'
       Positioned behind all interactive elements (z-[-1]).
     -->
     <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-[-1] opacity-95 p-6 md:p-8">
-      <h1 
-        class="text-4xl md:text-7xl lg:text-8xl text-center leading-[1.1] md:leading-[0.85] py-4 whitespace-nowrap -rotate-2 text-liquid-graffiti"
-        style="font-family: var(--font-graffiti);"
-        data-text="We build Web3 products with Passion"
-      >
-        We build Web3<br>products<br>with <span class="passion-power">Passion</span>
-      </h1>
+      <div class="graffiti-wrapper -rotate-2">
+        <!-- Layer 1: The Dark Stroke (Background) -->
+        <h1 
+          class="text-5xl md:text-7xl lg:text-8xl text-center text-liquid-graffiti-base text-liquid-graffiti-stroke py-4"
+          style="font-family: var(--font-graffiti);"
+          aria-hidden="true"
+        >
+          We build Web3<br>products<br>with <span class="passion-power">Passion</span>
+        </h1>
+        
+        <!-- Layer 2: The Liquid Gradient Fill (Foreground) -->
+        <h1 
+          class="text-5xl md:text-7xl lg:text-8xl text-center text-liquid-graffiti-base text-liquid-graffiti-fill py-4"
+          style="font-family: var(--font-graffiti);"
+        >
+          We build Web3<br>products<br>with <span class="passion-power">Passion</span>
+        </h1>
+      </div>
     </div>
 
     <!-- 
