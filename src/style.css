@@ -115,6 +115,22 @@
   background-blend-mode: overlay, screen, screen, screen, screen, screen;
 }
 
+/* Mobile-specific background optimizations */
+@media (max-width: 768px) {
+  .bg-abstract {
+    background-attachment: scroll;
+    /* Fix for Safari iOS performance and rendering */
+    background-image:
+      /* LAYER 1: Softer noise for mobile */
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
+      radial-gradient(at 80% 10%, rgba(59, 180, 253, 0.15) 0%, transparent 50%),
+      radial-gradient(at 10% 90%, rgba(132, 59, 253, 0.18) 0%, transparent 60%),
+      radial-gradient(at 25% 20%, rgba(132, 59, 253, 0.12) 0%, transparent 40%),
+      radial-gradient(at 90% 85%, rgba(59, 180, 253, 0.1) 0%, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(132, 59, 253, 0.05) 0%, transparent 70%);
+  }
+}
+
 @keyframes vhs-glitch {
 
   0%,
@@ -208,94 +224,91 @@ h3 {
   text-transform: uppercase;
 }
 
-.text-liquid-graffiti {
+/* 
+   BASE CLASSES FOR LAYERED H1 
+   Solving Safari stroke/fill issues by stacking two identical elements.
+*/
+
+.graffiti-wrapper {
   position: relative;
   display: inline-block;
+}
+
+.text-liquid-graffiti-base {
+  position: relative;
   font-family: var(--font-graffiti);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* STROKE LAYER (BACKGROUND) */
+.text-liquid-graffiti-stroke {
+  color: #1e1b4b;
+  -webkit-text-stroke: 6px #1e1b4b;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6));
+  z-index: 1;
+}
+
+/* FILL LAYER (FOREGROUND) */
+.text-liquid-graffiti-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-
-  /* Technical Inflation (Slightly thinner border to let light through) */
-  -webkit-text-stroke: 6px #1e1b4b;
-  paint-order: stroke fill;
-
-  /* Refractive Gradient (Ultra-saturated and vibrant colors) */
+  
   background-image: linear-gradient(135deg,
       #3BB4FD 0%,
-      /* Psy Blue */
       #843BFD 40%,
-      /* Psy Violet */
       #FDE53B 65%,
-      /* Psy Yellow */
       #d946ef 85%,
-      /* Magenta Pop */
       #3BB4FD 100%);
   background-size: 200% auto;
-
-  /* Crystalline Relief and Saturation */
+  
+  /* Crystalline Relief */
   text-shadow:
     -1px -1px 0px rgba(255, 255, 255, 0.5),
-    /* Sharp top-edge highlight */
     2px 2px 2px rgba(0, 0, 0, 0.8),
-    /* Relief shadow */
     0 10px 20px rgba(132, 59, 253, 0.3);
-  /* Volume aura */
 
-  /* Brightness and color filters to prevent dullness */
-  filter: brightness(1.1) saturate(1.4) drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6));
+  filter: brightness(1.1) saturate(1.4);
+  z-index: 2;
 
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  -webkit-font-smoothing: antialiased;
-
-  /* Internal flow animation */
-  animation: psy-liquid-flow 12s ease-in-out infinite alternate;
+  animation: liquid-text-flow 12s ease-in-out infinite alternate;
 }
 
-/* Hack para Safari (Detecta que es Safari y sobreescribe el grosor para evitar el glitch gordo) */
-@supports (background: -webkit-named-image(i)) {
-  .text-liquid-graffiti {
-    -webkit-text-stroke: 1.5px #1e1b4b;
+/* Mobile Typography Overrides */
+@media (max-width: 768px) {
+  .text-liquid-graffiti-base {
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .text-liquid-graffiti-stroke {
+    -webkit-text-stroke: 3px #1e1b4b; /* Proportional to mobile size */
+  }
+
+  .text-liquid-graffiti-fill {
+    background-image: linear-gradient(135deg,
+        #3BB4FD 0%,
+        #843BFD 40%,
+        #c026d3 65%,
+        #d946ef 85%,
+        #3BB4FD 100%);
   }
 }
 
 .passion-power {
-  position: relative;
-  display: inline-block;
-}
-
-.passion-power::after {
-  content: '';
-  position: absolute;
-  bottom: -15%;
-  left: -5%;
-  width: 112%;
-  height: 14px;
-  /* Liquid Yellow Fill (Psy Tones) */
-  background: linear-gradient(90deg, #FDE53B, #FFF280, #FDE53B, #FFD700, #FDE53B);
-  background-size: 200% auto;
-
-  /* Irregular Graffiti Stroke Shape */
-  border-radius: 120% 15% 90% 10% / 50% 10% 80% 20%;
-  transform: scaleX(0) skewX(-15deg) rotate(-1deg);
-  transform-origin: left;
-
-  /* Realistic Paint Drop Shadow */
-  filter: drop-shadow(0 4px 10px rgba(253, 229, 59, 0.4));
-  z-index: -1;
-
-  /* Animations: Drawing + Paint Flow */
-  animation:
-    draw-stroke-rayon 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s,
-    psy-liquid-flow 8s linear infinite;
-}
-
-@keyframes draw-stroke-rayon {
-  to {
-    transform: scaleX(1) skewX(-15deg) rotate(-1deg);
-  }
+  display: contents;
+  color: inherit;
+  -webkit-text-fill-color: inherit;
 }
 
 @keyframes liquid-text-flow {
@@ -308,9 +321,35 @@ h3 {
   }
 }
 
+@keyframes psy-pulsing-glow {
+  from {
+    text-shadow: 
+       0px  1.5px 0 #1e1b4b,  
+       0px -1.5px 0 #1e1b4b,
+       1.5px  0px 0 #1e1b4b,
+      -1.5px  0px 0 #1e1b4b,
+      -1px -1px 0px rgba(255,255,255,0.3),
+       0px 0px 10px rgba(132, 59, 253, 0.6);
+  }
+  to {
+    text-shadow: 
+       0px  1.5px 0 #1e1b4b,  
+       0px -1.5px 0 #1e1b4b,
+       1.5px  0px 0 #1e1b4b,
+      -1.5px  0px 0 #1e1b4b,
+      -1px -1px 0px rgba(255,255,255,0.4),
+       0px 0px 20px rgba(132, 59, 253, 1);
+  }
+}
+
 .text-glow-psy {
   filter: drop-shadow(0 0 10px rgba(132, 59, 253, 0.6));
 }
+/* 
+   GLOBAL UTILITIES
+   ----------------
+   Reusable system components and scrollbar configurations.
+*/
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 12px;

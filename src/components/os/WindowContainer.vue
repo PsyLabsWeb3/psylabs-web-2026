@@ -243,17 +243,4 @@ onUnmounted(() => {
   filter: blur(10px);
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 12px;
-  background-color: rgba(0, 0, 0, 0.2);
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(132, 59, 253, 0.3);
-  border: 4px solid transparent;
-  background-clip: padding-box;
-  border-radius: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(132, 59, 253, 0.6);
-}
 </style>
